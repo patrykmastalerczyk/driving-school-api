@@ -1,0 +1,19 @@
+{
+    "name": "driving-school/backend",
+    "description": "Backend API for driving school application",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "DrivingSchool\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

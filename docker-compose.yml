@@ -1,0 +1,58 @@
+services:
+  # PHP Application
+  app:
+    build: .
+    container_name: planjazd_app
+    ports:
+      - "8080:80"
+    environment:
+      - APP_ENV=development
+      - DB_HOST=mysql
+      - DB_NAME=planjazd
+      - DB_USER=planjazd_user
+      - DB_PASS=planjazd_password
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - planjazd_network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: planjazd_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: planjazd
+      MYSQL_USER: planjazd_user
+      MYSQL_PASSWORD: planjazd_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - planjazd_network
+
+  # phpMyAdmin (optional, for database management)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: planjazd_phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: planjazd_user
+      PMA_PASSWORD: planjazd_password
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - planjazd_network
+
+volumes:
+  mysql_data:
+
+networks:
+  planjazd_network:
+    driver: bridge
